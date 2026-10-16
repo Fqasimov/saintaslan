@@ -101,7 +101,8 @@ export function SaintAslanIntro({ background, ink, scale, speed, grain: withGrai
   const amp = D * 0.03 * (1 - dye) + D * 0.004
   const phase = frame * 0.085
   const k = (2 * Math.PI) / (D * 0.62)
-  const level = interpolate(dye, [0, 1], [cy + R + amp * 2, cy - R - amp * 3])
+  // Starts well below the circle: the deeper layer and the wave crests reach above the level.
+  const level = interpolate(dye, [0, 1], [cy + R + amp * 2 + D * 0.08, cy - R - amp * 3])
   const deep = wave(cx - R - 4, cx + R + 4, level - D * 0.035 * (1 - dye), cy + R + 4, amp * 1.15, phase * 0.8 + 2.1, k * 0.85)
   const { body: surface, crest } = wave(cx - R - 4, cx + R + 4, level, cy + R + 4, amp, phase, k)
   const crestAlpha = interpolate(dye, [0, 0.08, 0.85, 1], [0, 0.9, 0.9, 0], clamp)
@@ -201,7 +202,7 @@ export function SaintAslanIntro({ background, ink, scale, speed, grain: withGrai
             </defs>
 
             {/* The dye: a deeper layer behind a brighter surface. */}
-            <g clipPath="url(#sa-disc)">
+            <g clipPath="url(#sa-disc)" opacity={dye > 0 ? 1 : 0}>
               <path d={deep.body} fill={DYE_DEEP} />
               <path d={surface} fill={LOGO_RED} />
               <path d={crest} fill="none" stroke="#E46A5C" strokeWidth={Math.max(1, D * 0.0028)} opacity={crestAlpha} />

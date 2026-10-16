@@ -10,9 +10,9 @@ type Props = {
   onDone: () => void
 }
 
-// Fast off the mark, long settle: a heavy curtain drawn by hand.
-const PART = 'cubic-bezier(0.76, 0, 0.24, 1)'
-const PART_MS = 1250
+// Moves from the first frame, then settles long: a heavy curtain drawn by hand.
+const PART = 'cubic-bezier(0.55, 0.02, 0.18, 1)'
+const PART_MS = 1150
 
 /**
  * The opening: the logo film (a Remotion composition, played in the page). A red
@@ -37,7 +37,8 @@ export function Intro({ onOpening, onDone }: Props) {
     return { width, height: Math.round((width * h) / w), scale: portrait ? 0.74 : 0.5 }
   }, [])
 
-  const input: IntroProps = { background: null, ink: BRAND.taupe, scale: dims.scale, speed: SITE_SPEED, grain: true }
+  // No grain here: the player scales the frame, and a scaled tile shows its seams as lines.
+  const input: IntroProps = { background: null, ink: BRAND.taupe, scale: dims.scale, speed: SITE_SPEED, grain: false }
 
   useEffect(() => {
     const left = leftRef.current!
@@ -65,14 +66,18 @@ export function Intro({ onOpening, onDone }: Props) {
         return
       }
       const duration = fast ? 900 : PART_MS
+      // The logo steps back cleanly (no blur, which smeared the red into a dark ghost),
+      // and the curtain begins to part as it goes.
       stage.animate(
         [
-          { opacity: 1, transform: 'scale(1)', filter: 'blur(0px)' },
-          { opacity: 0, transform: 'scale(1.04)', filter: 'blur(6px)' },
+          { opacity: 1, transform: 'scale(1)' },
+          { opacity: 0, transform: 'scale(0.97)' },
         ],
-        { duration: duration * 0.45, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' },
+        // Fades as the gap opens, so there is never a moment of empty black.
+        { duration: 520, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'forwards' },
       )
-      const opts = { duration, delay: duration * 0.12, easing: PART, fill: 'forwards' as const }
+      stage.parentElement?.classList.add('is-parting')
+      const opts = { duration, easing: PART, fill: 'forwards' as const }
       left.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-101%)' }], opts)
       right.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(101%)' }], opts).finished.then(finish)
     }

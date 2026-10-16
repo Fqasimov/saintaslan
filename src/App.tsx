@@ -25,6 +25,16 @@ function introSeen() {
 
 export type Phase = 'intro' | 'opening' | 'open'
 
+/** The closed curtain alone, shown while the intro's code is still loading. */
+function IntroCurtain() {
+  return (
+    <div className="intro" aria-hidden="true">
+      <div className="intro__half intro__half--left" />
+      <div className="intro__half intro__half--right" />
+    </div>
+  )
+}
+
 export default function App() {
   const [phase, setPhase] = useState<Phase>(() => (introSeen() ? 'open' : 'intro'))
 
@@ -50,7 +60,7 @@ export default function App() {
   return (
     <>
       {phase !== 'open' && (
-        <Suspense fallback={<div className="intro" aria-hidden="true" />}>
+        <Suspense fallback={<IntroCurtain />}>
           <Intro onOpening={opening} onDone={done} />
         </Suspense>
       )}

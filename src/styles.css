@@ -365,22 +365,19 @@ html[data-phase='intro'] .hero__name .logo-mark__glyph {
   bottom: 0;
   width: 50.5%;
   background-color: var(--velvet);
-  /* The pile of the velvet: faint vertical folds, as a heavy curtain hangs. */
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgb(255 255 255 / 0.012) 0 1px,
-    transparent 1px 7px,
-    rgb(0 0 0 / 0.18) 7px 9px,
-    transparent 9px 64px
-  );
   will-change: transform;
 }
 .intro__half--left {
   left: 0;
-  box-shadow: 18px 0 40px -20px rgb(0 0 0 / 0.6);
 }
 .intro__half--right {
   right: 0;
+}
+/* The edges only cast a shadow once the halves move apart; closed, they meet without a seam. */
+.intro.is-parting .intro__half--left {
+  box-shadow: 18px 0 40px -20px rgb(0 0 0 / 0.6);
+}
+.intro.is-parting .intro__half--right {
   box-shadow: -18px 0 40px -20px rgb(0 0 0 / 0.6);
 }
 .intro__stage {
