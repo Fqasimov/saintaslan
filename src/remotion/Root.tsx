@@ -1,39 +1,35 @@
 import '@fontsource-variable/montserrat'
 import { useEffect, useState } from 'react'
 import { Composition, continueRender, delayRender } from 'remotion'
-import { BRAND, SaintAslanIntro } from './Intro'
-import { FPS, INTRO_FRAMES, REEL_FRAMES } from './timing'
+import { BRAND, SaintAslanIntro, type IntroProps } from './Intro'
+import { FPS, INTRO_FRAMES, MASTER_FRAMES, SITE_SPEED } from './timing'
 
 function useFonts() {
   const [handle] = useState(() => delayRender('Loading Montserrat'))
   useEffect(() => {
-    document.fonts.load('560 40px "Montserrat Variable"').finally(() => continueRender(handle))
+    document.fonts.load('500 40px "Montserrat Variable"').finally(() => continueRender(handle))
   }, [handle])
 }
+
+const film = (scale: number): IntroProps => ({ background: BRAND.velvet, ink: BRAND.taupe, scale, speed: 1, grain: true })
 
 export function RemotionRoot() {
   useFonts()
   return (
     <>
-      {/* The intro the site plays. */}
+      {/* The logo film, for the client: landscape, square (feed) and vertical (stories, reels). */}
+      <Composition id="LogoFilm" component={SaintAslanIntro} durationInFrames={MASTER_FRAMES} fps={FPS} width={1920} height={1080} defaultProps={film(0.5)} />
+      <Composition id="LogoFilmSquare" component={SaintAslanIntro} durationInFrames={MASTER_FRAMES} fps={FPS} width={1080} height={1080} defaultProps={film(0.52)} />
+      <Composition id="LogoFilmVertical" component={SaintAslanIntro} durationInFrames={MASTER_FRAMES} fps={FPS} width={1080} height={1920} defaultProps={film(0.7)} />
+      {/* The cut the site plays, faster and without the end hold. */}
       <Composition
-        id="Intro"
+        id="SiteIntro"
         component={SaintAslanIntro}
         durationInFrames={INTRO_FRAMES}
         fps={FPS}
         width={1600}
         height={900}
-        defaultProps={{ background: BRAND.velvet, ink: BRAND.taupe, scale: 0.56 }}
-      />
-      {/* The same moment as a vertical video for Instagram stories and reels. */}
-      <Composition
-        id="IntroReel"
-        component={SaintAslanIntro}
-        durationInFrames={REEL_FRAMES}
-        fps={FPS}
-        width={1080}
-        height={1920}
-        defaultProps={{ background: BRAND.velvet, ink: BRAND.taupe, scale: 0.78 }}
+        defaultProps={{ ...film(0.5), speed: SITE_SPEED }}
       />
     </>
   )

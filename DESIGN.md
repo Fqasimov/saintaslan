@@ -29,7 +29,7 @@ Roles (`--ground`, `--fg`, `--fg-2`, `--line`, `--accent`) are re-pointed under 
 
 | Moment | Treatment |
 | --- | --- |
-| Intro | Remotion: the red disc scales open (outExpo), the traced letters rise into it (3.2-frame stagger), a thread draws (ease-in-out) and becomes the Baku–Dubai route. Curtain halves part, 1250ms `cubic-bezier(.76,0,.24,1)`. |
+| Intro (logo film) | Remotion: a red thread is sewn in and wraps into a circle; dye rises in it with a liquid surface; the traced letters converge from 2.15× spacing (outQuint, centre first, motion blur) and are inked black where the dye reaches them; 3D camera settles face-on; one satin sheen; the Baku–Dubai route draws out. The disc stays flat, as printed: no glossy highlights. | Curtain halves part, 1250ms `cubic-bezier(.76,0,.24,1)`. |
 | Hero divider | Eased towards the pointer every frame (no springs that overshoot). |
 | Flats | Outline 1.9s ease-in-out, then seams and buttons, then the velvet wipes down 1.4s. Tilt ≤ 6°, 160ms while moving, 700ms ease-out back. Sheen masked to the garment's own alpha. |
 | Pictures | Unveil upward with `clip-path` 1250ms, settle from 1.12 scale. |

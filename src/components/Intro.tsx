@@ -1,7 +1,7 @@
 import { Player, type PlayerRef } from '@remotion/player'
 import { useEffect, useMemo, useRef } from 'react'
 import { BRAND, SaintAslanIntro, type IntroProps } from '../remotion/Intro'
-import { FPS, INTRO_FRAMES } from '../remotion/timing'
+import { FPS, INTRO_FRAMES, SITE_SPEED } from '../remotion/timing'
 
 type Props = {
   /** Fired as the curtains begin to part, so the page can rise in behind them. */
@@ -15,9 +15,9 @@ const PART = 'cubic-bezier(0.76, 0, 0.24, 1)'
 const PART_MS = 1250
 
 /**
- * The opening: the red disc of the logo blooms, its letters rise into it, and a thread
- * under it becomes the route between the two boutiques (a Remotion composition,
- * played in the page). Then the velvet curtain
+ * The opening: the logo film (a Remotion composition, played in the page). A red
+ * thread is sewn in and wraps into a circle, dye fills it, and the letters glide
+ * together and are inked black by the dye; then the route Baku to Dubai draws out. Then the velvet curtain
  * parts in two halves, one for each city, to uncover the site.
  * Any click, key, wheel or touch skips straight to the parting.
  */
@@ -37,7 +37,7 @@ export function Intro({ onOpening, onDone }: Props) {
     return { width, height: Math.round((width * h) / w), scale: portrait ? 0.74 : 0.5 }
   }, [])
 
-  const input: IntroProps = { background: null, ink: BRAND.taupe, scale: dims.scale }
+  const input: IntroProps = { background: null, ink: BRAND.taupe, scale: dims.scale, speed: SITE_SPEED, grain: true }
 
   useEffect(() => {
     const left = leftRef.current!

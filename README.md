@@ -8,7 +8,7 @@ The design comes from the house's own material: the logo (the name in thin, wide
 
 | Moment | What it does |
 | --- | --- |
-| Intro | A **Remotion** composition (`src/remotion/Intro.tsx`): the logo's red disc blooms open, the letters of the name (traced from the logo file) rise into it one by one, and a thread under it becomes the route Baku to Dubai. Then the velvet curtain parts in two halves, one per city. Once per browser session; any click, key or scroll skips it. `?nointro` skips it too. |
+| Intro | The **logo film**, a Remotion composition (`src/remotion/Intro.tsx`), played 1.3× faster than the master. Then the velvet curtain parts in two halves, one per city. Once per browser session; any click, key or scroll skips it. `?nointro` skips it too. |
 | Hero | Winter and Summer share the screen. The divider follows the mouse (or a finger, or the arrow keys), and the name changes colour where it crosses. |
 | Winter | Each velvet piece is **drawn before it appears**: its technical flat (outline, seams, buttons, traced from the house's product shot) draws in ink, then the velvet is laid over it. On a mouse the piece tilts in 3D and light runs over the nap. Then the gown opens out to the whole screen as you scroll. |
 | Summer 2026 | Polka dots appear and leave on their own beats as the season scrolls in; the page turns from velvet to stone; the looks run sideways on a pinned rail (a swipeable row on phones). |
@@ -16,6 +16,31 @@ The design comes from the house's own material: the logo (the name in thin, wide
 | The house, Contact | The logo as a 3D object: a red disc with a real edge that turns as you scroll and settles face-on. A statement that lights up word by word; both boutiques with their live clock (both keep GMT+4); a form that writes the WhatsApp message for you. |
 
 Everything respects "reduce motion": no curtain, no tilts, drawings shown complete.
+
+## The logo film
+
+One composition, rendered three ways for the house's own use (`media/`, 6.2 s, 60 fps):
+
+| File | Size | For |
+| --- | --- | --- |
+| `media/saint-aslan-logo-16x9.mp4` | 1920×1080 | Website, YouTube, screens in the boutiques |
+| `media/saint-aslan-logo-1x1.mp4` | 1080×1080 | Instagram feed |
+| `media/saint-aslan-logo-9x16.mp4` | 1080×1920 | Stories and Reels |
+
+What happens, beat by beat:
+
+1. **The thread** (0–1.5 s). A red thread is sewn in from the left, a bright needle point at its tip, and wraps into a circle. Its tail follows, so only the circle is left.
+2. **The dye** (1.2–2.7 s). Red dye rises inside the circle with a moving liquid surface: a deeper red layer behind, a thin bright meniscus on top. The thread outline melts into the full disc.
+3. **The name** (1.7–3.2 s). The letters, traced from the logo file, glide together from wide spacing with motion blur, centre first. Outside the dye they are taupe on the velvet; wherever the dye reaches them, they turn black.
+4. **The settle** (0–3.9 s). The camera starts turned in 3D and settles face-on; a slow light finds the disc; a satin sheen runs across it once.
+5. **The route** (3.6–4.7 s). A line draws out beneath, to Baku on one side and Dubai on the other. The end frame holds, with a camera drift too slow to notice.
+
+All timings are in `src/remotion/timing.ts`; colours and the traced letters come from the logo file.
+
+```bash
+npm run studio        # open Remotion Studio to preview and adjust
+npm run render:film   # render the three films into out/
+```
 
 ## Run it
 
@@ -27,11 +52,6 @@ npm run preview   # serve the build
 ```
 
 The build is static with relative paths, so `dist/` can go on any host (Netlify, Vercel, GitHub Pages, a plain web server).
-
-```bash
-npm run studio         # Remotion Studio, to adjust the intro
-npm run render:intro   # the intro as a 1080×1920 video for Instagram (out/)
-```
 
 Remotion is free for individuals and companies of up to three people; larger companies need a company license (remotion.dev/license).
 

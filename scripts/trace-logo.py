@@ -59,8 +59,8 @@ def main():
             if cv2.contourArea(contours[child]) > UP * UP * 2:
                 parts.append(to_path(contours[child]))
             child = hierarchy[child][0]
-        x = cv2.boundingRect(c)[0] / UP
-        glyphs.append((x, "".join(parts)))
+        bx, by, bw, bh = cv2.boundingRect(c)
+        glyphs.append((bx / UP, "".join(parts), (bx / UP, by / UP, bw / UP, bh / UP)))
     glyphs.sort()
 
     # Tight viewBox around the letters.
@@ -82,7 +82,12 @@ def main():
         "/** One path per letter, left to right: S A I N T  A S L A N. */",
         "export const LOGO_GLYPHS = [",
     ]
-    lines += [f"  '{d}'," for _, d in glyphs]
+    lines += [f"  '{d}'," for _, d, _ in glyphs]
+    lines.append("]")
+    lines.append("")
+    lines.append("/** Bounding box of each letter, [x, y, width, height], in viewBox units. */")
+    lines.append("export const LOGO_GLYPH_BOXES: [number, number, number, number][] = [")
+    lines += [f"  [{b[0]:.2f}, {b[1]:.2f}, {b[2]:.2f}, {b[3]:.2f}]," for _, _, b in glyphs]
     lines.append("]")
     OUT.write_text("\n".join(lines) + "\n")
     print(len(glyphs), "glyphs", vb, red)

@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "studio": "remotion studio src/remotion/index.ts",
-    "render:intro": "remotion render src/remotion/index.ts IntroReel out/saint-aslan-intro.mp4",
+    "render:film": "remotion render src/remotion/index.ts LogoFilm out/saint-aslan-logo-16x9.mp4 && remotion render src/remotion/index.ts LogoFilmSquare out/saint-aslan-logo-1x1.mp4 && remotion render src/remotion/index.ts LogoFilmVertical out/saint-aslan-logo-9x16.mp4",
     "images": "python3 scripts/export-images.py"
   },
   "dependencies": {
