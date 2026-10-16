@@ -14,7 +14,7 @@
   --taupe-ink: #6b5f51;
   --ink: #161412;
   --ink-2: #4f4a43;
-  --oxblood: #8c1d1f;
+  --red: #b8332a; /* the logo's disc */
   --placeholder: #cfc9bf;
 
   --sans: 'Montserrat Variable', Montserrat, system-ui, sans-serif;
@@ -50,7 +50,7 @@ html[data-ground='stone'] {
   --fg: var(--ink);
   --fg-2: var(--ink-2);
   --line: rgb(22 20 18 / 0.16);
-  --accent: var(--oxblood);
+  --accent: var(--red);
   --tile: var(--ivory);
 }
 html[data-ground='ivory'] {
@@ -58,7 +58,7 @@ html[data-ground='ivory'] {
   --fg: var(--ink);
   --fg-2: var(--ink-2);
   --line: rgb(22 20 18 / 0.14);
-  --accent: var(--oxblood);
+  --accent: var(--red);
   --tile: var(--stone);
 }
 
@@ -139,7 +139,7 @@ em {
   font-weight: 400;
 }
 ::selection {
-  background: var(--oxblood);
+  background: var(--red);
   color: var(--ivory);
 }
 :focus-visible {
@@ -195,15 +195,43 @@ em {
   line-height: 1.04;
 }
 
+.logo-mark {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: currentColor;
+  overflow: hidden;
+}
+.logo-mark__glyph {
+  transform-box: view-box;
+}
 .wordmark {
-  display: inline-flex;
-  gap: 0.75em;
-  font-weight: 580;
-  font-size: 0.8125rem;
-  letter-spacing: 0.3em;
-  margin-right: -0.3em;
-  white-space: nowrap;
-  line-height: 1;
+  width: clamp(150px, 13vw, 190px);
+}
+.logo-disc {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--red);
+  color: var(--velvet);
+}
+.logo-disc .logo-mark {
+  width: 78.6%;
+}
+
+/* Letters of the logotype rising one after another (hero on open, footer on view). */
+.js .footer__name .logo-mark__glyph,
+html[data-phase='intro'] .hero__name .logo-mark__glyph {
+  transform: translateY(130%);
+}
+.footer__name .logo-mark__glyph,
+.hero__name .logo-mark__glyph {
+  transition: transform 1200ms var(--ease-out);
+  transition-delay: calc(var(--i) * 45ms);
+}
+.js .footer__name.is-in .logo-mark__glyph {
+  transform: none;
 }
 
 .link-cta {
@@ -307,7 +335,7 @@ em {
 
 @media (hover: hover) and (pointer: fine) {
   .button--solid:hover {
-    background: var(--oxblood);
+    background: var(--red);
     color: var(--ivory);
   }
   .button--line:hover {
@@ -611,7 +639,7 @@ html[data-phase='intro'] .header {
 }
 
 /* Text blocks that rise in. */
-.js .reveal:not(.picture):not(.letters):not(.flat) {
+.js .reveal:not(.picture):not(.letters):not(.flat):not(.footer__name) {
   opacity: 0;
   transform: translateY(28px);
   transition:
@@ -619,7 +647,7 @@ html[data-phase='intro'] .header {
     transform 900ms var(--ease-out);
   transition-delay: calc(var(--i, 0) * 90ms);
 }
-.js .reveal.is-in:not(.picture):not(.letters):not(.flat) {
+.js .reveal.is-in:not(.picture):not(.letters):not(.flat):not(.footer__name) {
   opacity: 1;
   transform: none;
 }
@@ -701,25 +729,7 @@ html[data-phase='intro'] .header {
   mix-blend-mode: difference;
 }
 .hero__name {
-  font-size: clamp(2.4rem, 8.4vw, 10.5rem);
-  font-weight: 560;
-  letter-spacing: 0.2em;
-  margin-right: -0.2em;
-  line-height: 1;
-  white-space: nowrap;
-}
-.hero__name span {
-  display: inline-block;
-  transition:
-    transform 1300ms var(--ease-out),
-    opacity 1300ms var(--ease-out);
-}
-.hero__name span + span {
-  transition-delay: 90ms;
-}
-html[data-phase='intro'] .hero__name span {
-  transform: translateY(40%);
-  opacity: 0;
+  width: min(84vw, 1480px);
 }
 .hero__season {
   position: absolute;
@@ -738,7 +748,7 @@ html[data-phase='intro'] .hero__name span {
 }
 .hero__season b {
   font-weight: 620;
-  color: var(--oxblood);
+  color: var(--red);
 }
 .hero__side--winter .hero__season {
   left: var(--gutter);
@@ -802,7 +812,7 @@ html[data-phase='intro'] .hero__name span {
   top: calc(50% + clamp(3rem, 9vw, 9rem));
 }
 .hero__handle:focus-visible {
-  outline-color: var(--oxblood);
+  outline-color: var(--red);
 }
 
 /* ---------- Season heads (shared by every section) ---------- */
@@ -855,7 +865,7 @@ section {
   font-size: clamp(0.9rem, 0.7rem + 0.8vw, 1.4rem);
   font-weight: 620;
   letter-spacing: 0.32em;
-  color: var(--oxblood);
+  color: var(--red);
 }
 .season-head--summer {
   overflow: hidden;
@@ -1163,6 +1173,15 @@ section {
     opacity: 1;
   }
 }
+.rail__note {
+  margin: 4px 0 2px;
+  max-width: 34ch;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--fg-2);
+}
 .rail__num {
   font-family: var(--serif);
   font-style: italic;
@@ -1242,7 +1261,7 @@ section {
   height: 6px;
   margin-right: 10px;
   border-radius: 50%;
-  background: var(--oxblood);
+  background: var(--red);
   vertical-align: 1px;
 }
 @media (hover: hover) and (pointer: fine) {
@@ -1358,6 +1377,38 @@ section {
   color: var(--fg-2);
   max-width: 16rem;
 }
+.house__aside {
+  display: grid;
+  gap: 28px;
+  align-content: start;
+}
+.coin {
+  width: min(100%, 220px);
+  perspective: 900px;
+}
+.coin__body {
+  position: relative;
+  aspect-ratio: 1;
+  transform-style: preserve-3d;
+}
+.coin__face,
+.coin__edge {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+.coin__edge {
+  background: #7d221c;
+}
+.coin__face {
+  display: grid;
+  place-items: center;
+  background: var(--red);
+  color: var(--velvet);
+}
+.coin__face .logo-mark {
+  width: 78.6%;
+}
 .house__aside em {
   color: var(--fg);
   font-size: 1.3em;
@@ -1441,15 +1492,15 @@ section {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--oxblood);
+  background: var(--red);
   animation: pulse 2.4s var(--ease-out) infinite;
 }
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgb(140 29 31 / 0.45);
+    box-shadow: 0 0 0 0 rgb(184 51 42 / 0.45);
   }
   100% {
-    box-shadow: 0 0 0 10px rgb(140 29 31 / 0);
+    box-shadow: 0 0 0 10px rgb(184 51 42 / 0);
   }
 }
 .boutique__address {
@@ -1507,11 +1558,11 @@ section {
   border-bottom-color: var(--fg);
 }
 .field [aria-invalid='true'] {
-  border-bottom-color: var(--oxblood);
+  border-bottom-color: var(--red);
 }
 .field__error {
   font-size: 0.8125rem;
-  color: var(--oxblood);
+  color: var(--red);
 }
 .form__note {
   font-size: 0.8125rem;
@@ -1529,11 +1580,6 @@ section {
   overflow: hidden;
 }
 .footer__name {
-  font-size: clamp(2.6rem, 11.4vw, 14rem);
-  font-weight: 560;
-  letter-spacing: 0.08em;
-  line-height: 0.9;
-  white-space: nowrap;
   color: var(--taupe);
 }
 .footer__row {
@@ -1667,10 +1713,7 @@ section {
     transform: translateX(calc(100% + 16px));
   }
   .wordmark {
-    font-size: 0.75rem;
-    letter-spacing: 0.24em;
-    margin-right: -0.24em;
-    gap: 0.6em;
+    width: 132px;
   }
   /* The two seasons fill the screen and the divider wipes between them. */
   .hero__frame .picture {
@@ -1697,9 +1740,7 @@ section {
     min-height: 64svh;
   }
   .hero__name {
-    font-size: 10.4vw;
-    letter-spacing: 0.14em;
-    margin-right: -0.14em;
+    width: 88vw;
   }
   .hero__foot {
     flex-direction: column;
@@ -1756,14 +1797,14 @@ section {
   }
   .js .picture.reveal img,
   .js .letters .letters__ch,
-  .js .reveal:not(.picture):not(.letters):not(.flat) {
+  .js .reveal:not(.picture):not(.letters):not(.flat):not(.footer__name) {
     transform: none;
   }
   .js .flat__drawing path,
   .js .flat__drawing circle {
     stroke-dashoffset: 0;
   }
-  .js .reveal:not(.picture):not(.letters):not(.flat) {
+  .js .reveal:not(.picture):not(.letters):not(.flat):not(.footer__name) {
     transition: opacity 400ms ease;
   }
   .flat__tilt {

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { lazy, Suspense, useState } from 'react'
+import { LOGO_RED } from '../brand/Logo'
 import { Letters } from '../components/Letters'
 import { src, srcSet } from '../data/photos'
 import { PIECES, type Piece, type Season } from '../data/pieces'
@@ -105,7 +106,7 @@ export function Stock() {
         </div>
         <div className="stock__globe">
           <Suspense fallback={<div className="globe" />}>
-            <Globe city={city} ink="#1b1916" accent="#8c1d1f" label={`A globe turned to ${c.name}, with the route between Baku and Dubai`} />
+            <Globe city={city} ink="#1b1916" accent={LOGO_RED} label={`A globe turned to ${c.name}, with the route between Baku and Dubai`} />
           </Suspense>
         </div>
       </div>

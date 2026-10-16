@@ -125,6 +125,30 @@ export const SIZES = {
     "width": 1144,
     "height": 1406
   },
+  "floral-dress": {
+    "widths": [
+      720,
+      1164
+    ],
+    "width": 1164,
+    "height": 1466
+  },
+  "ocean-set": {
+    "widths": [
+      720,
+      1170
+    ],
+    "width": 1170,
+    "height": 1395
+  },
+  "ocean-set-editorial": {
+    "widths": [
+      720,
+      1169
+    ],
+    "width": 1169,
+    "height": 1455
+  },
   "velvet-corset": {
     "widths": [
       600,

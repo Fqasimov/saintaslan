@@ -1,4 +1,5 @@
 import { Letters } from '../components/Letters'
+import { LogoCoin } from '../components/LogoCoin'
 import { ScrubText } from '../components/ScrubText'
 
 const FACTS = [
@@ -20,9 +21,12 @@ export function House() {
         About Saint Aslan
       </h3>
       <div className="house__body">
-        <p className="house__aside reveal">
-          <em>Aslan</em> is the Azerbaijani word for lion.
-        </p>
+        <div className="house__aside">
+          <LogoCoin />
+          <p className="reveal">
+            <em>Aslan</em> is the Azerbaijani word for lion.
+          </p>
+        </div>
         <ScrubText
           className="house__statement"
           text="Saint Aslan is a couture house from Azerbaijan. It makes clothes with a strict line and a soft hand: velvet pulled in at the waist, chiffon left free to move, satin draped until it falls on its own."

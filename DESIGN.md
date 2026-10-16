@@ -14,13 +14,14 @@ Two grounds, both taken from the photographs: **velvet** (the winter pieces) and
 | `--taupe` | `#b9ad9e` | The name (as on the cover), section numbers on velvet. Large type only. |
 | `--taupe-ink` | `#6b5f51` | Seams in the drawings. |
 | `--ink` / `--ink-2` | `#161412` / `#4f4a43` | Text on stone and ivory. |
-| `--oxblood` | `#8c1d1f` | The "2026" of the cover; the chosen boutique; the route on the globe; hover on solid buttons. Never a large fill. |
+| `--red` | `#b8332a` | The logo's disc (sampled from the file). The logo itself, the "2026", the chosen boutique, the route on the globe, hover on solid buttons. The disc is the only large red. |
 
 Roles (`--ground`, `--fg`, `--fg-2`, `--line`, `--accent`) are re-pointed under `html[data-ground]`.
 
 ## Type
 
-- **Montserrat** (variable): the name, section titles and labels. Titles 520 weight, uppercase; labels 11px, +0.22em.
+- **The logotype** is never typeset: it is the logo file traced into paths (`src/brand/logo-paths.ts`), used in the header, hero, intro, footer and favicon.
+- **Montserrat** (variable): section titles and labels. Titles 520 weight, uppercase; labels 11px, +0.22em.
 - **Bodoni Moda italic** (variable, optical size): piece names, ledes, numerals. The product-card voice.
 - Body 16px / 1.6.
 
@@ -28,11 +29,12 @@ Roles (`--ground`, `--fg`, `--fg-2`, `--line`, `--accent`) are re-pointed under 
 
 | Moment | Treatment |
 | --- | --- |
-| Intro | Remotion: letters rise (outExpo, 3-frame stagger), tracking closes 0.62em → 0.2em, thread draws (ease-in-out) and becomes the Baku–Dubai route. Curtain halves part, 1250ms `cubic-bezier(.76,0,.24,1)`. |
+| Intro | Remotion: the red disc scales open (outExpo), the traced letters rise into it (3.2-frame stagger), a thread draws (ease-in-out) and becomes the Baku–Dubai route. Curtain halves part, 1250ms `cubic-bezier(.76,0,.24,1)`. |
 | Hero divider | Eased towards the pointer every frame (no springs that overshoot). |
 | Flats | Outline 1.9s ease-in-out, then seams and buttons, then the velvet wipes down 1.4s. Tilt ≤ 6°, 160ms while moving, 700ms ease-out back. Sheen masked to the garment's own alpha. |
 | Pictures | Unveil upward with `clip-path` 1250ms, settle from 1.12 scale. |
 | Stock | Cards leave in 220ms (blur + 0.96), arrive in 550ms, re-flow with layout animation 600ms; all `cubic-bezier(.23,1,.32,1)`. |
+| Logo coin | The disc with 14 edge layers in 3D, turned by scroll (spring-smoothed), face-on at the middle of the screen. |
 | Controls | Press scales to 0.97 in 160ms; hover only on fine pointers. |
 
 Reduced motion: no curtain or tilt, drawings complete, fades only.

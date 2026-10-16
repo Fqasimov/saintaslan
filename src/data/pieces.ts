@@ -12,6 +12,8 @@ export type Piece = {
   photo: Photo
   /** A second view, shown on hover / in the stock card. */
   alt?: Photo
+  /** The house's own description, quoted as written. */
+  note?: string
   /** Product shot cut out of its white sweep (drawn as a flat first). */
   cutout?: boolean
   /**
@@ -83,6 +85,24 @@ export const PIECES: Piece[] = [
     season: 'summer',
     detail: 'Chiffon, bell sleeves',
     photo: photo('ivory-chiffon'),
+    stock: ['baku'],
+  },
+  {
+    id: 'ocean-set',
+    name: 'Blue Ocean Chiffon Set', // working name, after the house's caption
+    season: 'summer',
+    detail: 'Chiffon, ruched off-shoulder top and skirt',
+    photo: photo('ocean-set'),
+    alt: photo('ocean-set-editorial'),
+    note: 'Blue ocean color flowing top and a matching bottom, crafted from lightweight and breathable chiffon fabric. The set is a reminiscence of serene sea waters.',
+    stock: ['baku', 'dubai'],
+  },
+  {
+    id: 'floral',
+    name: 'Floral Square-neck Maxi Dress', // working name
+    season: 'summer',
+    detail: 'Floral print, pearl buttons, lace hem',
+    photo: photo('floral-dress'),
     stock: ['baku'],
   },
   {

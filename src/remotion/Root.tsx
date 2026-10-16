@@ -23,7 +23,7 @@ export function RemotionRoot() {
         fps={FPS}
         width={1600}
         height={900}
-        defaultProps={{ background: BRAND.velvet, ink: BRAND.taupe, accent: BRAND.oxblood, scale: 0.72 }}
+        defaultProps={{ background: BRAND.velvet, ink: BRAND.taupe, scale: 0.56 }}
       />
       {/* The same moment as a vertical video for Instagram stories and reels. */}
       <Composition
@@ -33,7 +33,7 @@ export function RemotionRoot() {
         fps={FPS}
         width={1080}
         height={1920}
-        defaultProps={{ background: BRAND.velvet, ink: BRAND.taupe, accent: BRAND.oxblood, scale: 0.86 }}
+        defaultProps={{ background: BRAND.velvet, ink: BRAND.taupe, scale: 0.78 }}
       />
     </>
   )

@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from 'motion/react'
 import { useEffect, useRef } from 'react'
+import { LogoMark } from '../brand/Logo'
 import { Picture } from '../components/Picture'
 import { photo } from '../data/photos'
 import { useFinePointer, useReducedMotion } from '../lib/hooks'
@@ -90,11 +91,11 @@ export function Hero({ ready }: { ready: boolean }) {
         <motion.div className="hero__word" style={{ y: wordY }}>
           {hidden ? (
             <p className="hero__name" aria-hidden="true">
-              <span>SAINT</span> <span>ASLAN</span>
+              <LogoMark />
             </p>
           ) : (
             <h1 className="hero__name">
-              <span>SAINT</span> <span>ASLAN</span>
+              <LogoMark title="Saint Aslan" />
             </h1>
           )}
         </motion.div>

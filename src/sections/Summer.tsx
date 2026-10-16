@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, type MotionValue } from 'motion/react'
+import { motion, useMotionValueEvent, useScroll, useTransform, type MotionValue } from 'motion/react'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Letters } from '../components/Letters'
 import { Picture } from '../components/Picture'
@@ -7,7 +7,7 @@ import { byId } from '../data/pieces'
 import { useMedia, useReducedMotion } from '../lib/hooks'
 
 const COVER = byId('halter-peplum')
-const LOOKS = ['ivory-set', 'polka', 'noir-wrap', 'royal-satin'].map(byId)
+const LOOKS = ['ocean-set', 'ivory-set', 'polka', 'floral', 'noir-wrap', 'royal-satin'].map(byId)
 
 // The dots of the polka gown, scattered over the opening of the season. Positions are
 // fixed (not random per visit) so the composition is designed, not accidental.
@@ -44,6 +44,20 @@ export function Summer() {
   const { scrollYProgress: railProgress } = useScroll({ target: railRef, offset: ['start start', 'end end'] })
   const x = useTransform(railProgress, [0, 1], [0, -distance])
   const bar = useTransform(railProgress, [0, 1], [0, 1])
+
+  // Cards slide in sideways, which the page's viewport observer does not always see,
+  // so the rail unveils its own photographs as each one crosses into the screen.
+  const unveil = () => {
+    // Measure after motion has written this frame's transform.
+    requestAnimationFrame(() => {
+      trackRef.current?.querySelectorAll('.picture.reveal:not(.is-in)').forEach((el) => {
+        const r = el.getBoundingClientRect()
+        if (r.left < window.innerWidth * 0.94 && r.right > 0 && r.top < window.innerHeight && r.bottom > 0) el.classList.add('is-in')
+      })
+    })
+  }
+  useMotionValueEvent(x, 'change', unveil)
+  useMotionValueEvent(railProgress, 'change', unveil)
 
   // How far the track must travel so its last card ends at the right edge.
   useLayoutEffect(() => {
@@ -100,11 +114,11 @@ export function Summer() {
 
       <div ref={railRef} className="rail" data-ground="stone" data-pinned={pinned} style={pinned ? { height: `calc(100vh + ${distance}px)` } : undefined}>
         <div className="rail__sticky">
-          <motion.ul ref={trackRef} className="rail__track" role="list" style={pinned ? { x } : undefined}>
+          <motion.ul ref={trackRef} className="rail__track" role="list" style={pinned ? { x } : undefined} onScroll={unveil}>
             <li className="rail__intro">
               <p className="worn__kicker">The looks</p>
               <p className="rail__lede">
-                <em>Four ways to wear the heat.</em>
+                <em>Six ways to wear the heat.</em>
               </p>
               <p className="rail__hint" aria-hidden="true">
                 {pinned ? 'Keep scrolling' : 'Swipe'} <span>→</span>
@@ -122,6 +136,11 @@ export function Summer() {
                   </p>
                   <h3 className="piece-name">{look.name}</h3>
                   <p className="label">{look.detail}</p>
+                  {look.note && (
+                    <blockquote className="rail__note">
+                      <p>“{look.note}”</p>
+                    </blockquote>
+                  )}
                   <StockNote piece={look} />
                 </div>
               </li>

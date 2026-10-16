@@ -15,17 +15,17 @@ Show the two seasons and turn interest into a reservation over WhatsApp with the
 ## Capabilities and Constraints
 
 - Couture with two boutiques: Baku and Dubai, each with its own stock. Visitors choose a boutique; the choice is remembered and drives every WhatsApp link.
-- Two seasons: Winter (velvet) and Summer 2026 (chiffon, satin, a polka dot).
+- Two seasons: Winter (velvet) and Summer 2026 (chiffon, satin, prints).
 - No cart, no prices, no sizes on the site.
 - English only.
 - Unknown and not to be invented: addresses, phone numbers, prices, sizes, fabric composition, founding year, press, clients.
 
 ## Brand Commitments
 
-- Name: Saint Aslan. On the campaign cover the name is set in wide geometric capitals in taupe, with "SUMMER 2026" small in oxblood.
+- Logo: "SAINT ASLAN" in thin, wide black capitals across a red disc (`#B8332A`). Supplied as `assets-src/logo.jpg`, traced to vector.
+- On the campaign cover the name is set heavier in taupe, with "SUMMER 2026" small in dark red.
 - Product cards caption pieces in a Didone italic ("Velvet Waist-fitted Zip Corset").
 - "Aslan" is the Azerbaijani word for lion.
-- The logo file is still to come; the wordmark component is the placeholder.
 
 ## Product Principles
 

@@ -32,6 +32,9 @@ PHOTOS = {
     "summer-cover": (0, 0, 1169, 1912),
     "noir-ruffle": (0, 0, 1169, 1488),
     "royal-satin": (16, 150, 1160, 1556),
+    "floral-dress": (0, 0, 1164, 1466),
+    "ocean-set": (0, 10, 1170, 1405),
+    "ocean-set-editorial": (0, 0, 1169, 1455),
 }
 WIDTHS = [720, 1200]
 

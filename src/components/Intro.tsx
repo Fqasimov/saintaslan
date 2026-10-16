@@ -15,8 +15,9 @@ const PART = 'cubic-bezier(0.76, 0, 0.24, 1)'
 const PART_MS = 1250
 
 /**
- * The opening: the name rises and a thread becomes the route between the two
- * boutiques (a Remotion composition, played in the page). Then the velvet curtain
+ * The opening: the red disc of the logo blooms, its letters rise into it, and a thread
+ * under it becomes the route between the two boutiques (a Remotion composition,
+ * played in the page). Then the velvet curtain
  * parts in two halves, one for each city, to uncover the site.
  * Any click, key, wheel or touch skips straight to the parting.
  */
@@ -33,10 +34,10 @@ export function Intro({ onOpening, onDone }: Props) {
     const h = window.innerHeight
     const portrait = h > w
     const width = 1600
-    return { width, height: Math.round((width * h) / w), scale: portrait ? 0.9 : 0.62 }
+    return { width, height: Math.round((width * h) / w), scale: portrait ? 0.74 : 0.5 }
   }, [])
 
-  const input: IntroProps = { background: null, ink: BRAND.taupe, accent: BRAND.oxblood, scale: dims.scale }
+  const input: IntroProps = { background: null, ink: BRAND.taupe, scale: dims.scale }
 
   useEffect(() => {
     const left = leftRef.current!
@@ -83,7 +84,7 @@ export function Intro({ onOpening, onDone }: Props) {
       timers.push(window.setTimeout(() => leave(false), 1000))
     } else if (player) {
       player.addEventListener('ended', onEnded)
-      const ready = document.fonts.load('560 40px "Montserrat Variable"')
+      const ready = document.fonts.load('500 40px "Montserrat Variable"')
       const timeout = new Promise((r) => setTimeout(r, 1200))
       Promise.race([ready, timeout])
         .catch(() => undefined)
