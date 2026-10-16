@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Letters } from '../components/Letters'
 import { PIECES } from '../data/pieces'
 import { useCity } from '../lib/city'
@@ -34,18 +34,25 @@ export function Contact() {
   const [message, setMessage] = useState('')
   const [error, setError] = useState(false)
 
+  const lines = [
+    `Hello Saint Aslan ${CITIES[city].name}, my name is ${name.trim()}.`,
+    piece && `I am interested in the ${piece}.`,
+    message.trim(),
+  ].filter(Boolean)
+  const url = whatsappUrl(city, lines.join('\n'))
+  const linkRef = useRef<HTMLAnchorElement>(null)
+
+  // The send control is a real link (it works in every browser and embed, where a
+  // script-opened window may be blocked); it only refuses while the name is missing.
+  const guard = (e: React.MouseEvent) => {
+    if (name.trim()) return
+    e.preventDefault()
+    setError(true)
+  }
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim()) {
-      setError(true)
-      return
-    }
-    const lines = [
-      `Hello Saint Aslan ${CITIES[city].name}, my name is ${name.trim()}.`,
-      piece && `I am interested in the ${piece}.`,
-      message.trim(),
-    ].filter(Boolean)
-    window.open(whatsappUrl(city, lines.join('\n')), '_blank', 'noopener')
+    if (!name.trim()) setError(true)
+    else linkRef.current?.focus()
   }
 
   return (
@@ -121,9 +128,9 @@ export function Contact() {
             <span className="label">Message (optional)</span>
             <textarea rows={3} value={message} onChange={(e) => setMessage(e.target.value)} />
           </label>
-          <button type="submit" className="button button--solid button--wide">
+          <a ref={linkRef} className="button button--solid button--wide" href={url} target="_blank" rel="noreferrer" onClick={guard}>
             Send on WhatsApp to {CITIES[city].name}
-          </button>
+          </a>
           <p className="form__note">
             Opens WhatsApp. Nothing is stored on this site. Instagram: <a href={instagramUrl} target="_blank" rel="noreferrer">@{INSTAGRAM}</a>
           </p>

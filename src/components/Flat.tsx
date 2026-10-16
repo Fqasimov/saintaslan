@@ -48,7 +48,8 @@ export function Flat({ piece, sizes, delay = 0, className = '' }: Props) {
   const style = {
     '--ar': `${flat.width} / ${flat.height}`,
     '--delay': `${delay}ms`,
-    '--mask': `url(${image})`,
+    // Absolute: a url() inside a custom property resolves against the stylesheet that uses it.
+    '--mask': `url("${new URL(image, document.baseURI).href}")`,
   } as CSSProperties
 
   return (
