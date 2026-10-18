@@ -172,6 +172,15 @@ em {
   transform: none;
 }
 
+@font-face {
+  font-family: 'Montserrat Cities';
+  font-style: normal;
+  font-weight: 560;
+  font-display: swap;
+  src: url('./fonts/montserrat-cities-560.woff2') format('woff2');
+  unicode-range: U+0041-0042, U+0044, U+0049, U+004B, U+0055, U+0061-0062, U+0064, U+0069, U+006B, U+0075;
+}
+
 /* ---------- Type ---------- */
 
 .label {
@@ -1245,6 +1254,10 @@ section {
   border-bottom: 1px solid var(--line);
 }
 .stock__city-name {
+  /* Montserrat at the site's weight with each letter merged into one shape, so the
+     outline of an unchosen city has no seams inside B, K and A
+     (scripts/make-outline-font.py). */
+  font-family: 'Montserrat Cities', var(--sans);
   font-size: clamp(3.4rem, 10vw, 9rem);
   font-weight: 560;
   letter-spacing: 0.04em;
