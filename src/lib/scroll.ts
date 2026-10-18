@@ -10,7 +10,7 @@ export function startSmoothScroll() {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const coarse = window.matchMedia('(pointer: coarse)').matches
   if (reduce || coarse || lenis) return () => {}
-  lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 0.95 })
+  lenis = new Lenis({ lerp: 0.17, wheelMultiplier: 1 })
   let raf = 0
   const tick = (t: number) => {
     lenis?.raf(t)

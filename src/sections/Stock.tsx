@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { LOGO_RED } from '../brand/Logo'
 import { Letters } from '../components/Letters'
 import { src, srcSet } from '../data/photos'
@@ -75,6 +75,22 @@ export function Stock() {
   const { city, setCity } = useCity()
   const [filter, setFilter] = useState<Filter>('all')
   const reduce = useReducedMotion()
+  const globeRef = useRef<HTMLDivElement>(null)
+  const [globeNear, setGlobeNear] = useState(false)
+
+  // The globe's code loads only as the stock comes near, so it never competes with the
+  // opening for bandwidth.
+  useEffect(() => {
+    const el = globeRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return
+      setGlobeNear(true)
+      io.disconnect()
+    }, { rootMargin: '900px 0px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   const inCity = PIECES.filter((p) => p.stock.includes(city))
   const shown = inCity.filter((p) => filter === 'all' || p.season === filter)
@@ -104,10 +120,14 @@ export function Stock() {
             <CityButton key={id} id={id} active={city === id} count={PIECES.filter((p) => p.stock.includes(id)).length} onPick={() => setCity(id)} />
           ))}
         </div>
-        <div className="stock__globe">
-          <Suspense fallback={<div className="globe" />}>
-            <Globe city={city} ink="#1b1916" accent={LOGO_RED} label={`A globe turned to ${c.name}, with the route between Baku and Dubai`} />
-          </Suspense>
+        <div ref={globeRef} className="stock__globe">
+          {globeNear ? (
+            <Suspense fallback={<div className="globe" />}>
+              <Globe city={city} ink="#1b1916" accent={LOGO_RED} label={`A globe turned to ${c.name}, with the route between Baku and Dubai`} />
+            </Suspense>
+          ) : (
+            <div className="globe" />
+          )}
         </div>
       </div>
 
@@ -133,8 +153,8 @@ export function Stock() {
               layout={!reduce}
               initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.97, filter: 'blur(6px)' }}
               animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, filter: 'blur(6px)', transition: { duration: 0.22, ease: EASE } }}
-              transition={{ duration: 0.55, ease: EASE, layout: { duration: 0.6, ease: EASE } }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, filter: 'blur(6px)', transition: { duration: 0.18, ease: EASE } }}
+              transition={{ duration: 0.42, ease: EASE, layout: { duration: 0.46, ease: EASE } }}
             >
               <Card piece={piece} city={city} />
             </motion.li>

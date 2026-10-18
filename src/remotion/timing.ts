@@ -37,6 +37,6 @@ export const T = {
 export const MASTER_FRAMES = 372
 
 /** The site plays the film this much faster than the master. */
-export const SITE_SPEED = 1.3
+export const SITE_SPEED = 1.6
 /** Frames the site plays: up to the cities landing, then it opens. */
-export const INTRO_FRAMES = Math.ceil((T.citiesTo + 10) / SITE_SPEED)
+export const INTRO_FRAMES = Math.ceil((T.citiesTo + 6) / SITE_SPEED)

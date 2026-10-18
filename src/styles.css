@@ -93,8 +93,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition:
-    background-color 900ms var(--ease-in-out),
-    color 900ms var(--ease-in-out);
+    background-color 600ms var(--ease-in-out),
+    color 600ms var(--ease-in-out);
 }
 
 img,
@@ -227,8 +227,8 @@ html[data-phase='intro'] .hero__name .logo-mark__glyph {
 }
 .footer__name .logo-mark__glyph,
 .hero__name .logo-mark__glyph {
-  transition: transform 1200ms var(--ease-out);
-  transition-delay: calc(var(--i) * 45ms);
+  transition: transform 800ms var(--ease-out);
+  transition-delay: calc(var(--i) * 30ms);
 }
 .js .footer__name.is-in .logo-mark__glyph {
   transform: none;
@@ -397,10 +397,27 @@ html[data-phase='intro'] .hero__name .logo-mark__glyph {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 24px;
+  color: var(--fg);
+  background-color: var(--ground);
+  transition:
+    transform 380ms var(--ease-drawer),
+    background-color 400ms var(--ease-out),
+    color 400ms var(--ease-out);
+}
+/*
+ * At the very top the header sits over both seasons of the hero, so it inverts what is
+ * under it. A blend mode on a fixed element repaints the page on every scroll frame, so
+ * once the page moves the header becomes a plain band in the page's own colours.
+ */
+.header[data-top='true'] {
+  background-color: transparent;
   color: var(--ivory);
-  /* Reads on velvet, stone and the photographs alike. */
   mix-blend-mode: difference;
-  transition: transform 450ms var(--ease-drawer);
+}
+.header[data-menu='true'] {
+  background-color: transparent;
+  color: var(--ivory);
+  mix-blend-mode: normal;
 }
 .header[data-hidden='true'] {
   transform: translateY(-100%);
@@ -539,7 +556,7 @@ html[data-phase='intro'] .header {
   background: var(--velvet);
   color: var(--ivory);
   clip-path: inset(0 0 100% 0);
-  transition: clip-path 600ms var(--ease-in-out);
+  transition: clip-path 480ms var(--ease-in-out);
   visibility: hidden;
 }
 .menu[data-open='true'] {
@@ -576,8 +593,8 @@ html[data-phase='intro'] .header {
 .menu[data-open='true'] nav a {
   opacity: 1;
   transform: none;
-  transition-duration: 700ms;
-  transition-delay: calc(180ms + var(--i) * 55ms);
+  transition-duration: 520ms;
+  transition-delay: calc(120ms + var(--i) * 40ms);
 }
 .menu__num {
   font-family: var(--serif);
@@ -622,11 +639,11 @@ html[data-phase='intro'] .header {
 }
 .js .picture.reveal {
   clip-path: inset(100% 0 0 0);
-  transition: clip-path 1250ms var(--ease-in-out);
+  transition: clip-path 850ms var(--ease-in-out);
 }
 .js .picture.reveal img {
-  transform: scale(1.12);
-  transition: transform 1700ms var(--ease-out);
+  transform: scale(1.06);
+  transition: transform 1100ms var(--ease-out);
 }
 .js .picture.reveal.is-in {
   clip-path: inset(0 0 0 0);
@@ -638,11 +655,11 @@ html[data-phase='intro'] .header {
 /* Text blocks that rise in. */
 .js .reveal:not(.picture):not(.letters):not(.flat):not(.footer__name) {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(18px);
   transition:
-    opacity 900ms var(--ease-out),
-    transform 900ms var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 90ms);
+    opacity 650ms var(--ease-out),
+    transform 650ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 60ms);
 }
 .js .reveal.is-in:not(.picture):not(.letters):not(.flat):not(.footer__name) {
   opacity: 1;
@@ -664,8 +681,8 @@ html[data-phase='intro'] .header {
 }
 .js .letters .letters__ch {
   transform: translateY(108%);
-  transition: transform 1100ms var(--ease-out);
-  transition-delay: calc(var(--i) * 38ms);
+  transition: transform 750ms var(--ease-out);
+  transition-delay: calc(var(--i) * 26ms);
 }
 .js .letters.is-in .letters__ch {
   transform: none;
@@ -913,7 +930,7 @@ section {
   aspect-ratio: var(--ar);
   transform-style: preserve-3d;
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 700ms var(--ease-out);
+  transition: transform 500ms var(--ease-out);
 }
 .flat__tilt[data-active='true'] {
   transition-duration: 160ms;
@@ -942,12 +959,12 @@ section {
 }
 .flat.is-in .flat__outline {
   stroke-dashoffset: 0;
-  transition: stroke-dashoffset 1900ms var(--ease-in-out) var(--delay);
+  transition: stroke-dashoffset 1300ms var(--ease-in-out) var(--delay);
 }
 .flat.is-in .flat__line,
 .flat.is-in .flat__button {
   stroke-dashoffset: 0;
-  transition: stroke-dashoffset 1000ms var(--ease-in-out) calc(var(--delay) + 900ms + var(--i) * 120ms);
+  transition: stroke-dashoffset 700ms var(--ease-in-out) calc(var(--delay) + 600ms + var(--i) * 90ms);
 }
 .flat__cloth {
   position: absolute;
@@ -959,7 +976,7 @@ section {
 }
 .flat.is-in .flat__cloth {
   clip-path: inset(0 0 0 0);
-  transition: clip-path 1400ms var(--ease-in-out) calc(var(--delay) + 1900ms);
+  transition: clip-path 1000ms var(--ease-in-out) calc(var(--delay) + 1300ms);
 }
 .flat__cloth img {
   width: 100%;
@@ -1012,7 +1029,7 @@ section {
 
 /* Winter, worn: the gown opens out to the whole screen. */
 .worn {
-  height: 230vh;
+  height: 180vh;
 }
 .worn__sticky {
   position: sticky;
@@ -1270,13 +1287,64 @@ section {
   grid-column: 8 / -1;
 }
 .globe {
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
   touch-action: pan-y;
   cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .globe:active {
   cursor: grabbing;
+}
+.globe__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+/* The city names follow their dots (set from the draw loop) and sit on opposite sides of
+   them, so the route between the cities never runs through a name. */
+.globe__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-out);
+  will-change: transform;
+}
+.globe__label > span {
+  position: absolute;
+  top: 0;
+  display: block;
+  padding: 5px 9px 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-2);
+  background: rgb(241 237 230 / 0.92);
+  border: 1px solid rgb(22 20 18 / 0.12);
+  transition:
+    color 300ms var(--ease-out),
+    background-color 300ms var(--ease-out),
+    border-color 300ms var(--ease-out);
+}
+.globe__label--baku > span {
+  right: 12px;
+  transform: translateY(-50%);
+}
+.globe__label--dubai > span {
+  left: 12px;
+  transform: translateY(-50%);
+}
+.globe__label[data-chosen='true'] > span {
+  color: var(--ivory);
+  background: var(--ink);
+  border-color: var(--ink);
 }
 .stock__bar {
   display: flex;
@@ -1318,7 +1386,7 @@ section {
   height: 100%;
   object-fit: cover;
   object-position: 50% 15%;
-  transition: transform 900ms var(--ease-out);
+  transition: transform 700ms var(--ease-out);
 }
 .stock-card--cutout .stock-card__media {
   background: var(--stone);
@@ -1756,7 +1824,7 @@ section {
     padding: 8% 26%;
   }
   .worn {
-    height: 170vh;
+    height: 150vh;
   }
   .worn__text {
     right: var(--gutter);

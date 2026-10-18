@@ -36,6 +36,7 @@ function go(e: React.MouseEvent, id: string, after?: () => void) {
 
 export function Header() {
   const [hidden, setHidden] = useState(false)
+  const [top, setTop] = useState(true)
   const [open, setOpen] = useState(false)
   const { city } = useCity()
   const time = useClock(CITIES[city].zone)
@@ -48,6 +49,7 @@ export function Header() {
       cancelAnimationFrame(raf)
       raf = requestAnimationFrame(() => {
         const y = window.scrollY
+        setTop(y < 24)
         const delta = y - last.current
         if (Math.abs(delta) > 6) setHidden(delta > 0 && y > window.innerHeight * 0.6)
         last.current = y
@@ -67,7 +69,7 @@ export function Header() {
 
   return (
     <>
-      <header className="header" data-hidden={hidden && !open}>
+      <header className="header" data-hidden={hidden && !open} data-top={top} data-menu={open}>
         <a className="header__mark" href="#top" onClick={(e) => go(e, 'top')} aria-label="Saint Aslan, back to top">
           <Wordmark />
         </a>

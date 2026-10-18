@@ -29,35 +29,43 @@ export function Hero({ ready }: { ready: boolean }) {
   const wordY = useTransform(scrollYProgress, [0, 1], ['0%', '-60%'])
   const footOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0])
 
-  // The divider eases towards its goal every frame; writing a CSS variable keeps React out of it.
-  useEffect(() => {
-    const el = ref.current!
-    let raf = 0
+  // The divider eases towards its goal; writing a CSS variable keeps React out of it.
+  // The loop runs only while the divider is moving, so a still hero costs nothing.
+  const raf = useRef(0)
+  const kick = () => {
+    if (raf.current) return
+    const el = ref.current
+    if (!el) return
     const tick = () => {
       const s = split.current
-      s.now += (s.goal - s.now) * (reduce ? 1 : 0.085)
-      if (Math.abs(s.goal - s.now) < 0.01) s.now = s.goal
-      el.style.setProperty('--split', `${s.now}%`)
+      s.now += (s.goal - s.now) * (reduce ? 1 : 0.14)
+      const settled = Math.abs(s.goal - s.now) < 0.05
+      if (settled) s.now = s.goal
+      el.style.setProperty('--split', `${s.now.toFixed(2)}%`)
       handleRef.current?.setAttribute('aria-valuenow', String(Math.round(s.now)))
-      raf = requestAnimationFrame(tick)
+      raf.current = settled ? 0 : requestAnimationFrame(tick)
     }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [reduce])
+    raf.current = requestAnimationFrame(tick)
+  }
+  const setGoal = (v: number) => {
+    split.current.goal = v
+    kick()
+  }
+  useEffect(() => () => cancelAnimationFrame(raf.current), [])
 
   // Once the curtain is up, summer slides in beside winter.
   useEffect(() => {
     if (!ready) return
     const t = window.setTimeout(() => {
-      if (!split.current.touched) split.current.goal = 50
-    }, reduce ? 0 : 500)
+      if (!split.current.touched) setGoal(50)
+    }, reduce ? 0 : 250)
     return () => clearTimeout(t)
   }, [ready, reduce])
 
   const setFromX = (clientX: number) => {
     const r = ref.current!.getBoundingClientRect()
     split.current.touched = true
-    split.current.goal = clamp(((clientX - r.left) / r.width) * 100, 8, 92)
+    setGoal(clamp(((clientX - r.left) / r.width) * 100, 8, 92))
   }
 
   const onPointerMove = (e: React.PointerEvent) => {
@@ -66,10 +74,10 @@ export function Hero({ ready }: { ready: boolean }) {
   const onKey = (e: React.KeyboardEvent) => {
     const step = e.shiftKey ? 20 : 5
     const s = split.current
-    if (e.key === 'ArrowLeft') s.goal = clamp(s.goal - step, 0, 100)
-    else if (e.key === 'ArrowRight') s.goal = clamp(s.goal + step, 0, 100)
-    else if (e.key === 'Home') s.goal = 0
-    else if (e.key === 'End') s.goal = 100
+    if (e.key === 'ArrowLeft') setGoal(clamp(s.goal - step, 0, 100))
+    else if (e.key === 'ArrowRight') setGoal(clamp(s.goal + step, 0, 100))
+    else if (e.key === 'Home') setGoal(0)
+    else if (e.key === 'End') setGoal(100)
     else return
     s.touched = true
     e.preventDefault()

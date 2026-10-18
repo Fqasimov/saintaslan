@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { LAND_DOTS } from '../data/globe-dots'
-import { CITIES, type CityId } from '../lib/contact'
+import { CITIES, CITY_IDS, type CityId } from '../lib/contact'
 
 type Props = {
   city: CityId
@@ -12,6 +12,20 @@ type Props = {
 
 const RAD = Math.PI / 180
 const other = (c: CityId): CityId => (c === 'baku' ? 'dubai' : 'baku')
+
+// The trigonometry of every land dot, worked out once instead of on every frame.
+const N = LAND_DOTS.length / 2
+const DOT_LON = new Float32Array(N)
+const DOT_SIN_LAT = new Float32Array(N)
+const DOT_COS_LAT = new Float32Array(N)
+for (let i = 0; i < N; i++) {
+  const lat = (LAND_DOTS[i * 2 + 1] / 10) * RAD
+  DOT_LON[i] = (LAND_DOTS[i * 2] / 10) * RAD
+  DOT_SIN_LAT[i] = Math.sin(lat)
+  DOT_COS_LAT[i] = Math.cos(lat)
+}
+// Dots are drawn in a few bands of depth, one fill style change per band.
+const BANDS = 6
 
 /** Great-circle interpolation between two [lon, lat] points (degrees). */
 function interpolator(a: [number, number], b: [number, number]) {
@@ -33,10 +47,13 @@ function interpolator(a: [number, number], b: [number, number]) {
 /**
  * A dotted globe, turned to whichever boutique is chosen, with the route between
  * Baku and Dubai drawn as an arc above the surface. Drag to turn it; it settles back.
- * Plain canvas and an orthographic projection: no map library at runtime.
+ * The sphere is a plain canvas; the city names are real text laid over it, so they
+ * stay sharp at any pixel density.
  */
 export function Globe({ city, ink, accent, label }: Props) {
+  const wrapRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const labelRefs = useRef<Record<CityId, HTMLSpanElement | null>>({ baku: null, dubai: null })
   const state = useRef({
     lon: CITIES[city].coords[0],
     lat: CITIES[city].coords[1] - 8,
@@ -46,7 +63,6 @@ export function Globe({ city, ink, accent, label }: Props) {
     city,
     // 0..1: how far the route has been drawn since the last change of city.
     route: 0,
-    pulse: 0,
   })
 
   useEffect(() => {
@@ -64,6 +80,8 @@ export function Globe({ city, ink, accent, label }: Props) {
     let h = 0
     let dpr = 1
     const start = performance.now()
+    const bandX: number[][] = Array.from({ length: BANDS }, () => [])
+    const bandY: number[][] = Array.from({ length: BANDS }, () => [])
 
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -87,33 +105,33 @@ export function Globe({ city, ink, accent, label }: Props) {
 
       if (!s.drag) {
         // Critically damped spring towards the goal: no overshoot, no wobble.
-        const k = 0.045
-        const damp = 0.78
+        const k = 0.06
+        const damp = 0.76
         s.vLon = (s.vLon + (goalLon - s.lon) * k) * damp
         s.vLat = (s.vLat + (goalLat - s.lat) * k) * damp
         s.lon += reduce ? goalLon - s.lon : s.vLon
         s.lat += reduce ? goalLat - s.lat : s.vLat
       }
-      s.route = reduce ? 1 : Math.min(1, s.route + 0.012)
-      s.pulse = (t * 0.6) % 1
+      s.route = reduce ? 1 : Math.min(1, s.route + 0.018)
+      const pulse = (t * 0.6) % 1
 
       const R = Math.min(w, h) * 0.44
       const cx = w / 2
       const cy = h / 2
       const l0 = s.lon * RAD
-      const p0 = s.lat * RAD
-      const sinP0 = Math.sin(p0)
-      const cosP0 = Math.cos(p0)
+      const sinP0 = Math.sin(s.lat * RAD)
+      const cosP0 = Math.cos(s.lat * RAD)
 
       const project = (lon: number, lat: number, lift = 1) => {
         const l = lon * RAD - l0
         const p = lat * RAD
         const cosP = Math.cos(p)
-        const cosc = sinP0 * Math.sin(p) + cosP0 * cosP * Math.cos(l)
+        const sinP = Math.sin(p)
+        const cosL = Math.cos(l)
         return {
           x: cx + R * lift * cosP * Math.sin(l),
-          y: cy - R * lift * (cosP0 * Math.sin(p) - sinP0 * cosP * Math.cos(l)),
-          z: cosc,
+          y: cy - R * lift * (cosP0 * sinP - sinP0 * cosP * cosL),
+          z: sinP0 * sinP + cosP0 * cosP * cosL,
         }
       }
 
@@ -129,20 +147,32 @@ export function Globe({ city, ink, accent, label }: Props) {
       ctx.stroke()
 
       // Land: dots fade and shrink towards the rim, which is what makes it read as round.
+      for (let b = 0; b < BANDS; b++) {
+        bandX[b].length = 0
+        bandY[b].length = 0
+      }
+      for (let i = 0; i < N; i++) {
+        const l = DOT_LON[i] - l0
+        const cosL = Math.cos(l)
+        const z = sinP0 * DOT_SIN_LAT[i] + cosP0 * DOT_COS_LAT[i] * cosL
+        if (z <= 0.02) continue
+        const b = Math.min(BANDS - 1, (z * BANDS) | 0)
+        bandX[b].push(cx + R * DOT_COS_LAT[i] * Math.sin(l))
+        bandY[b].push(cy - R * (cosP0 * DOT_SIN_LAT[i] - sinP0 * DOT_COS_LAT[i] * cosL))
+      }
       ctx.fillStyle = ink
       const base = Math.max(0.9, R / 240)
-      for (let i = 0; i < LAND_DOTS.length; i += 2) {
-        const q = project(LAND_DOTS[i] / 10, LAND_DOTS[i + 1] / 10)
-        if (q.z <= 0.02) continue
-        ctx.globalAlpha = 0.12 + q.z * 0.55
-        const r = base * (0.55 + q.z * 0.6)
-        ctx.fillRect(q.x - r, q.y - r, r * 2, r * 2)
+      for (let b = 0; b < BANDS; b++) {
+        const z = (b + 0.5) / BANDS
+        ctx.globalAlpha = 0.12 + z * 0.55
+        const r = base * (0.55 + z * 0.6)
+        const xs = bandX[b]
+        const ys = bandY[b]
+        for (let i = 0; i < xs.length; i++) ctx.fillRect(xs[i] - r, ys[i] - r, r * 2, r * 2)
       }
 
       // The route, lifted off the surface, drawn from the other city to the chosen one.
-      const from = CITIES[other(s.city)].coords
-      const to = CITIES[s.city].coords
-      const along = interpolator(from, to)
+      const along = interpolator(CITIES[other(s.city)].coords, target)
       const steps = 64
       const eased = 1 - Math.pow(1 - s.route, 3)
       ctx.beginPath()
@@ -158,14 +188,18 @@ export function Globe({ city, ink, accent, label }: Props) {
       ctx.lineWidth = 1.5
       ctx.stroke()
 
-      // Both boutiques: the chosen one in the accent with a slow ring.
-      ctx.font = `500 ${Math.max(10, R * 0.055)}px "Montserrat Variable", Montserrat, sans-serif`
-      ctx.textBaseline = 'middle'
-      for (const id of ['baku', 'dubai'] as CityId[]) {
+      // Both boutiques: the chosen one in the accent with a slow ring. Their names are
+      // HTML, moved to follow the dots.
+      for (const id of CITY_IDS) {
         const c = CITIES[id]
         const q = project(c.coords[0], c.coords[1])
-        if (q.z <= 0) continue
         const chosen = id === s.city
+        const el = labelRefs.current[id]
+        if (el) {
+          el.style.transform = `translate3d(${q.x.toFixed(1)}px, ${q.y.toFixed(1)}px, 0)`
+          el.style.opacity = q.z > 0.05 ? '1' : '0'
+        }
+        if (q.z <= 0) continue
         ctx.globalAlpha = 1
         ctx.fillStyle = chosen ? accent : ink
         ctx.beginPath()
@@ -173,15 +207,11 @@ export function Globe({ city, ink, accent, label }: Props) {
         ctx.fill()
         if (chosen && !reduce) {
           ctx.beginPath()
-          ctx.arc(q.x, q.y, 4 + s.pulse * 18, 0, Math.PI * 2)
-          ctx.globalAlpha = (1 - s.pulse) * 0.6
+          ctx.arc(q.x, q.y, 4 + pulse * 18, 0, Math.PI * 2)
+          ctx.globalAlpha = (1 - pulse) * 0.6
           ctx.strokeStyle = accent
           ctx.stroke()
         }
-        ctx.globalAlpha = chosen ? 1 : 0.6
-        ctx.fillStyle = ink
-        const text = c.name.toUpperCase().split('').join(String.fromCharCode(8202))
-        ctx.fillText(text, q.x + 12, q.y + (id === 'baku' ? -2 : 2))
       }
       ctx.globalAlpha = 1
     }
@@ -196,8 +226,7 @@ export function Globe({ city, ink, accent, label }: Props) {
       if (visible) raf = requestAnimationFrame(loop)
     })
     io.observe(canvas)
-    // Draw once even before it scrolls in, so it is never blank.
-    document.fonts.ready.then(() => draw(performance.now()))
+    draw(performance.now())
 
     return () => {
       cancelAnimationFrame(raf)
@@ -209,7 +238,7 @@ export function Globe({ city, ink, accent, label }: Props) {
   const onDown = (e: React.PointerEvent) => {
     const s = state.current
     s.drag = { x: e.clientX, y: e.clientY, lon: s.lon, lat: s.lat }
-    ;(e.target as Element).setPointerCapture(e.pointerId)
+    wrapRef.current?.setPointerCapture(e.pointerId)
   }
   const onMove = (e: React.PointerEvent) => {
     const s = state.current
@@ -223,8 +252,8 @@ export function Globe({ city, ink, accent, label }: Props) {
   }
 
   return (
-    <canvas
-      ref={canvasRef}
+    <div
+      ref={wrapRef}
       className="globe"
       role="img"
       aria-label={label}
@@ -232,6 +261,21 @@ export function Globe({ city, ink, accent, label }: Props) {
       onPointerMove={onMove}
       onPointerUp={onUp}
       onPointerCancel={onUp}
-    />
+    >
+      <canvas ref={canvasRef} className="globe__canvas" />
+      {CITY_IDS.map((id) => (
+        <span
+          key={id}
+          ref={(el) => {
+            labelRefs.current[id] = el
+          }}
+          className={`globe__label globe__label--${id}`}
+          data-chosen={id === city}
+          aria-hidden="true"
+        >
+          <span>{CITIES[id].name}</span>
+        </span>
+      ))}
+    </div>
   )
 }

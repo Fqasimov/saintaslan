@@ -39,7 +39,7 @@ export function Winter() {
       <ul className="winter__flats" role="list">
         {FLATS.map((piece, i) => (
           <li key={piece.id} className={`winter__piece winter__piece--${piece.id}`}>
-            <Flat piece={piece} sizes="(min-width: 900px) 30vw, 88vw" delay={i * 260} />
+            <Flat piece={piece} sizes="(min-width: 900px) 30vw, 88vw" delay={i * 160} />
             <div className="piece-caption reveal">
               <h3 className="piece-name">{piece.name}</h3>
               <p className="label">{piece.detail}</p>

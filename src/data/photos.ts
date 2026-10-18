@@ -14,5 +14,5 @@ export function photo(name: PhotoName): Photo {
   return { name, width: s.width, height: s.height, widths: s.widths }
 }
 
-export const src = (p: Photo, w?: number) => `looks/${p.name}-${w ?? p.widths[0]}.webp`
+export const src = (p: Photo, w?: number) => `looks/${p.name}-${w ?? p.widths[0]}.avif`
 export const srcSet = (p: Photo) => p.widths.map((w) => `${src(p, w)} ${w}w`).join(', ')

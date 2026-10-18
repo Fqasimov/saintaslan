@@ -1,5 +1,5 @@
 """
-Crops the owner's photographs (assets-src/) and writes the WebP sizes the site uses
+Crops the owner's photographs (assets-src/) and writes the AVIF sizes the site uses
 into public/looks/.
 
 - Campaign photos are cropped clear of the screenshot borders and the Instagram counter.
@@ -36,7 +36,7 @@ PHOTOS = {
     "ocean-set": (0, 10, 1170, 1405),
     "ocean-set-editorial": (0, 0, 1169, 1455),
 }
-WIDTHS = [720, 1200]
+WIDTHS = [480, 800, 1200]
 
 # Product shots on a white sweep: (left, top, right, bottom)
 CUTOUTS = {
@@ -44,7 +44,7 @@ CUTOUTS = {
     "velvet-jacket": (80, 330, 1090, 1690),
     "velvet-skirt": (180, 200, 990, 1880),
 }
-CUT_WIDTHS = [600, 1000]
+CUT_WIDTHS = [480, 1000]
 
 
 def save(img: Image.Image, name: str, widths):
@@ -60,7 +60,8 @@ def save(img: Image.Image, name: str, widths):
     for w in ws:
         h = round(img.height * w / img.width)
         out = img.resize((w, h), Image.LANCZOS)
-        out.save(OUT / f"{name}-{w}.webp", "WEBP", quality=82, method=6)
+        # AVIF: about half the bytes of WebP at the same look; alpha is kept for cut-outs.
+        out.save(OUT / f"{name}-{w}.avif", "AVIF", quality=62, speed=4)
         sizes[w] = (w, h)
     return sizes
 

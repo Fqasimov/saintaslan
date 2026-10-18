@@ -81,7 +81,7 @@ No prices, sizes, addresses, dates or fabric compositions appear anywhere, on pu
 | `src/brand/Logo.tsx` | The logotype (`LogoMark`) and the full red-disc logo (`LogoDisc`). |
 | `src/brand/logo-paths.ts` | The logo traced into one vector path per letter, and its red (generated). |
 | `src/data/pieces.ts` | Pieces, seasons and stock per boutique. |
-| `src/data/generated.ts` | Image sizes and the traced flats (generated). |
+| `src/data/generated.ts` | Image sizes and the traced flats (generated). Photos ship as AVIF in three widths (480 / 800 / 1200). |
 | `assets-src/` | The house's original photographs. |
 | `scripts/export-images.py` | Crops the photos, cuts the velvet pieces out of their white sweep and traces their flats. `npm run images` (needs Pillow, numpy, opencv-python-headless). |
 | `scripts/trace-logo.py` | Traces `assets-src/logo.jpg` into `src/brand/logo-paths.ts`. Also the source of `public/logo.svg` and the favicon. |

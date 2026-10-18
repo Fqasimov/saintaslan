@@ -12,7 +12,7 @@ type Props = {
 
 // Moves from the first frame, then settles long: a heavy curtain drawn by hand.
 const PART = 'cubic-bezier(0.55, 0.02, 0.18, 1)'
-const PART_MS = 1150
+const PART_MS = 950
 
 /**
  * The opening: the logo film (a Remotion composition, played in the page). A red
@@ -65,7 +65,7 @@ export function Intro({ onOpening, onDone }: Props) {
         right.animate([{ opacity: 1 }, { opacity: 0 }], fade).finished.then(finish)
         return
       }
-      const duration = fast ? 900 : PART_MS
+      const duration = fast ? 750 : PART_MS
       // The logo steps back cleanly (no blur, which smeared the red into a dark ghost),
       // and the curtain begins to part as it goes.
       stage.animate(
@@ -74,7 +74,7 @@ export function Intro({ onOpening, onDone }: Props) {
           { opacity: 0, transform: 'scale(0.97)' },
         ],
         // Fades as the gap opens, so there is never a moment of empty black.
-        { duration: 520, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'forwards' },
+        { duration: 440, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'forwards' },
       )
       stage.parentElement?.classList.add('is-parting')
       const opts = { duration, easing: PART, fill: 'forwards' as const }
@@ -83,19 +83,15 @@ export function Intro({ onOpening, onDone }: Props) {
     }
 
     const skip = () => leave(true)
-    const onEnded = () => timers.push(window.setTimeout(() => leave(false), 280))
+    const onEnded = () => timers.push(window.setTimeout(() => leave(false), 160))
 
     if (reduce.current) {
       timers.push(window.setTimeout(() => leave(false), 1000))
     } else if (player) {
       player.addEventListener('ended', onEnded)
-      const ready = document.fonts.load('500 40px "Montserrat Variable"')
-      const timeout = new Promise((r) => setTimeout(r, 1200))
-      Promise.race([ready, timeout])
-        .catch(() => undefined)
-        .then(() => {
-          if (!disposed && !leaving) player.play()
-        })
+      // Play at once: the only text in the film (the city names) comes in two seconds
+      // later, long after the typeface has arrived.
+      player.play()
       // If playback cannot start at all, the page still opens.
       timers.push(window.setTimeout(() => leave(false), 8000))
     }

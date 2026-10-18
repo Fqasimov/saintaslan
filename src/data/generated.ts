@@ -71,7 +71,8 @@ export const OUTLINES = {
 export const SIZES = {
   "velvet-choker-gown": {
     "widths": [
-      720,
+      480,
+      800,
       1156
     ],
     "width": 1156,
@@ -79,7 +80,8 @@ export const SIZES = {
   },
   "ivory-chiffon": {
     "widths": [
-      720,
+      480,
+      800,
       1074
     ],
     "width": 1074,
@@ -87,7 +89,8 @@ export const SIZES = {
   },
   "polka-gown": {
     "widths": [
-      720,
+      480,
+      800,
       1156
     ],
     "width": 1156,
@@ -95,7 +98,8 @@ export const SIZES = {
   },
   "polka-gown-close": {
     "widths": [
-      720,
+      480,
+      800,
       1162
     ],
     "width": 1162,
@@ -103,7 +107,8 @@ export const SIZES = {
   },
   "summer-cover": {
     "widths": [
-      720,
+      480,
+      800,
       1169
     ],
     "width": 1169,
@@ -111,7 +116,8 @@ export const SIZES = {
   },
   "noir-ruffle": {
     "widths": [
-      720,
+      480,
+      800,
       1169
     ],
     "width": 1169,
@@ -119,7 +125,8 @@ export const SIZES = {
   },
   "royal-satin": {
     "widths": [
-      720,
+      480,
+      800,
       1144
     ],
     "width": 1144,
@@ -127,7 +134,8 @@ export const SIZES = {
   },
   "floral-dress": {
     "widths": [
-      720,
+      480,
+      800,
       1164
     ],
     "width": 1164,
@@ -135,7 +143,8 @@ export const SIZES = {
   },
   "ocean-set": {
     "widths": [
-      720,
+      480,
+      800,
       1170
     ],
     "width": 1170,
@@ -143,7 +152,8 @@ export const SIZES = {
   },
   "ocean-set-editorial": {
     "widths": [
-      720,
+      480,
+      800,
       1169
     ],
     "width": 1169,
@@ -151,7 +161,7 @@ export const SIZES = {
   },
   "velvet-corset": {
     "widths": [
-      600,
+      480,
       901
     ],
     "width": 901,
@@ -159,7 +169,7 @@ export const SIZES = {
   },
   "velvet-jacket": {
     "widths": [
-      600,
+      480,
       1000
     ],
     "width": 1010,
@@ -167,6 +177,7 @@ export const SIZES = {
   },
   "velvet-skirt": {
     "widths": [
+      480,
       603
     ],
     "width": 603,

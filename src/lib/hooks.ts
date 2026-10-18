@@ -35,7 +35,7 @@ export function useReveal(active: boolean) {
           io.unobserve(e.target)
         }
       },
-      { rootMargin: '0px 0px -10% 0px' },
+      { rootMargin: '0px 0px -4% 0px' },
     )
     const observe = () => document.querySelectorAll('.reveal:not(.is-in)').forEach((el) => io.observe(el))
     observe()
