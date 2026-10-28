@@ -29,4 +29,5 @@ function preloadIntro(): Plugin {
 export default defineConfig({
   base: './',
   plugins: [react(), preloadIntro()],
+  build: { assetsInlineLimit: 0 },
 })

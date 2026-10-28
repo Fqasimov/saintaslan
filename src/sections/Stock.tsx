@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { LOGO_RED } from '../brand/Logo'
+import { Fallback } from '../components/Fallback'
 import { Letters } from '../components/Letters'
 import { src, srcSet } from '../data/photos'
 import { PIECES, type Piece, type Season } from '../data/pieces'
@@ -122,9 +123,11 @@ export function Stock() {
         </div>
         <div ref={globeRef} className="stock__globe">
           {globeNear ? (
-            <Suspense fallback={<div className="globe" />}>
-              <Globe city={city} ink="#1b1916" accent={LOGO_RED} label={`A globe turned to ${c.name}, with the route between Baku and Dubai`} />
-            </Suspense>
+            <Fallback fallback={<div className="globe" />}>
+              <Suspense fallback={<div className="globe" />}>
+                <Globe city={city} ink="#1b1916" accent={LOGO_RED} label={`A globe turned to ${c.name}, with the route between Baku and Dubai`} />
+              </Suspense>
+            </Fallback>
           ) : (
             <div className="globe" />
           )}

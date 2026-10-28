@@ -1,4 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import { Fallback } from './components/Fallback'
 import { Header } from './components/Header'
 import { useGround, useReveal } from './lib/hooks'
 import { startSmoothScroll } from './lib/scroll'
@@ -47,6 +48,14 @@ export default function App() {
     document.documentElement.dataset.phase = phase
   }, [phase])
 
+  // Whatever happens to the intro (its code cannot load, the player stalls), the site
+  // opens: no visitor is ever left in front of a closed curtain.
+  useEffect(() => {
+    if (phase === 'open') return
+    const t = window.setTimeout(() => setPhase('open'), phase === 'intro' ? 9000 : 2500)
+    return () => clearTimeout(t)
+  }, [phase])
+
   const opening = useCallback(() => setPhase('opening'), [])
   const done = useCallback(() => {
     try {
@@ -60,9 +69,11 @@ export default function App() {
   return (
     <>
       {phase !== 'open' && (
-        <Suspense fallback={<IntroCurtain />}>
-          <Intro onOpening={opening} onDone={done} />
-        </Suspense>
+        <Fallback onError={done}>
+          <Suspense fallback={<IntroCurtain />}>
+            <Intro onOpening={opening} onDone={done} />
+          </Suspense>
+        </Fallback>
       )}
       <a className="skip-link" href="#stock">
         Skip to the stock
